@@ -8,11 +8,11 @@
 
 using namespace std;
 
-bool compareInt(int arr[], int sortArr[], int sortNum, int sortCount, int leftPos, int rightPos, int maxInd){
+bool compareInt(int arrInt[], int sortArr[], int sortNum, int sortCount, int leftPos, int rightPos){
     if(sortNum >= sortCount) return true;
     
-    int comp = arr[leftPos];
-    int comp1 = arr[rightPos];
+    int comp = arrInt[leftPos];
+    int comp1 = arrInt[rightPos];
 
     if(sortArr[sortNum] == 0){
         comp = comp % 10;
@@ -30,57 +30,7 @@ bool compareInt(int arr[], int sortArr[], int sortNum, int sortCount, int leftPo
     if (comp < comp1) return true;
     else if (comp > comp1) return false;
     
-    return compareInt(arr, sortArr, sortNum+1, sortCount, leftPos, rightPos, maxInd);
-}
-
-void mergeInt(int arr[], int sortArr[], int sortCount, int i, int j, int k, int maxInd) {
-    int mergedSize = k - i + 1;
-    int mergePos = 0;
-    int leftPos = i; // Initialize left partition position
-    int rightPos = j + 1; // Initialize right partition position
-    int* mergedInt = new int[mergedSize]; // Dynamically allocates temporary array for merged arr
-
-    while (leftPos <= j && rightPos <= k) { // Add smallest element from left or right partition to merged arr
-        if (compareInt(arr, sortArr, 0, sortCount, leftPos, rightPos, maxInd)) {
-            mergedInt[mergePos] = arr[leftPos];
-            ++leftPos;
-        }
-        else {
-            mergedInt[mergePos] = arr[rightPos];
-            ++rightPos;
-         
-        }
-        ++mergePos;
-    }
-   
-    while (leftPos <= j) { // If left partition is not empty, add remaining elements to merged arr
-        mergedInt[mergePos] = arr[leftPos];
-        ++leftPos;
-        ++mergePos;
-    }
-   
-    while (rightPos <= k) { // If right partition is not empty, add remaining elements to merged arr
-        mergedInt[mergePos] = arr[rightPos];
-        ++rightPos;
-        ++mergePos;
-    }
-   
-    for (mergePos = 0; mergePos < mergedSize; ++mergePos) { // Copy merge number back to arr
-        arr[i + mergePos] = mergedInt[mergePos];
-    }
-    delete[] mergedInt;
-}
-
-void mergeSortInt(int arr[], int sortArr[], int sortCount, int i, int k, int maxInd) {
-    int j;
-    if (i < k) {
-        j = (i + k) / 2; // Find the midpoint in the partition
-
-        mergeSortInt(arr, sortArr, sortCount, i, j, maxInd); // Recursively sort left and right partitions
-        mergeSortInt(arr, sortArr, sortCount, j + 1, k, maxInd);
-      
-        mergeInt(arr, sortArr, sortCount, i, j, k, maxInd);// Merge left and right partition in sorted order
-    }
+    return compareInt(arrInt, sortArr, sortNum+1, sortCount, leftPos, rightPos);
 }
 
 bool compare(string arr[], int sortArr[], int sortNum, int sortCount, int leftPos, int rightPos){
@@ -96,55 +46,89 @@ bool compare(string arr[], int sortArr[], int sortNum, int sortCount, int leftPo
     return compare(arr, sortArr, sortNum+1, sortCount, leftPos, rightPos);
 }
 
-void mergeStr(string arr[], int sortArr[], int sortCount, int i, int j, int k) {
+void merge(string arr[], int sortArr[], int arrInt[], string datatype, int sortCount, int i, int j, int k) {
     int mergedSize = k - i + 1;
     int mergePos = 0;
     int leftPos = i;
     int rightPos = j + 1;
-    string* mergedStr = new string[mergedSize];
 
-    while (leftPos <= j && rightPos <= k) {
-        if (compare(arr, sortArr, 0, sortCount, leftPos, rightPos)) {
-            mergedStr[mergePos] = arr[leftPos];
+    if(datatype == "s"){
+        string* merged = new string[mergedSize];
+        while (leftPos <= j && rightPos <= k) {
+            if (compare(arr, sortArr, 0, sortCount, leftPos, rightPos)) {
+                merged[mergePos] = arr[leftPos];
+                ++leftPos;
+            }
+            else {
+                merged[mergePos] = arr[rightPos];
+                ++rightPos;
+            }
+            ++mergePos;
+        }
+
+        while (leftPos <= j) {
+            merged[mergePos] = arr[leftPos];
             ++leftPos;
+            ++mergePos;
         }
-        else {
-            mergedStr[mergePos] = arr[rightPos];
+
+        while (rightPos <= k) {
+            merged[mergePos] = arr[rightPos];
             ++rightPos;
+            ++mergePos;
         }
-        ++mergePos;
-    }
 
-    while (leftPos <= j) {
-        mergedStr[mergePos] = arr[leftPos];
-        ++leftPos;
-        ++mergePos;
-    }
+        for (mergePos = 0; mergePos < mergedSize; ++mergePos) {
+            arr[i + mergePos] = merged[mergePos];
+        }
 
-    while (rightPos <= k) {
-        mergedStr[mergePos] = arr[rightPos];
-        ++rightPos;
-        ++mergePos;
+        delete[] merged;
     }
+    if(datatype == "i"){
+        int* merged = new int[mergedSize];
+        while (leftPos <= j && rightPos <= k) { // Add smallest element from left or right partition to merged arr
+            if (compareInt(arrInt, sortArr, 0, sortCount, leftPos, rightPos)) {
+                merged[mergePos] = arrInt[leftPos];
+                ++leftPos;
+            }
+            else {
+                merged[mergePos] = arrInt[rightPos];
+                ++rightPos;
 
-    for (mergePos = 0; mergePos < mergedSize; ++mergePos) {
-        arr[i + mergePos] = mergedStr[mergePos];
+            }
+            ++mergePos;
+        }
+
+        while (leftPos <= j) {
+            merged[mergePos] = arrInt[leftPos];
+            ++leftPos;
+            ++mergePos;
+        }
+
+        while (rightPos <= k) {
+            merged[mergePos] = arrInt[rightPos];
+            ++rightPos;
+            ++mergePos;
+        }
+
+        for (mergePos = 0; mergePos < mergedSize; ++mergePos) {
+            arrInt[i + mergePos] = merged[mergePos];
+        }
+        delete[] merged;
     }
-
-    delete[] mergedStr;
 }
 
 
-void mergeSortStr(string arr[], int sortArr[], int sortCount, int i, int k) {
+void mergeSort(string arr[], int sortArr[], int arrInt[], string datatype, int sortCount, int i, int k) {
     int j;
    
     if (i < k) {
         j = (i + k) / 2; // Find the midpoint in the partition
       
-        mergeSortStr(arr, sortArr, sortCount, i, j); // Recursively sort left and right partitions
-        mergeSortStr(arr, sortArr, sortCount, j + 1, k);
+        mergeSort(arr, sortArr, arrInt, datatype, sortCount, i, j); // Recursively sort left and right partitions
+        mergeSort(arr, sortArr, arrInt, datatype, sortCount, j + 1, k);
       
-        mergeStr(arr, sortArr, sortCount, i, j, k); // Merge left and right partition in sorted order
+        merge(arr, sortArr, arrInt, datatype, sortCount, i, j, k); // Merge left and right partition in sorted order
     }
 }
 
@@ -179,7 +163,7 @@ int main(int argc, char *argv[]){
     int sortArg;
     int sortCount = 0;
 
-    int max, maxInd;
+    int max;
 
     if(datatype != "i" && datatype != "s"){
         cout << "Invalid datatype \"" << datatype << "\" (must be \"i\" or \"s\")";
@@ -208,19 +192,17 @@ int main(int argc, char *argv[]){
 
     if(datatype == "i"){
         inFS >> max;
-        maxInd = count;
         arrInt[count] = max;
         count++;
         while(inFS >> temp) {
             if(temp > max) {
                 max = temp;
-                maxInd = count - 1;
             }
             arrInt[count] = temp;
             count++;
         }
 
-        mergeSortInt(arrInt, sortArr, sortCount, 0, count-1, maxInd);
+        mergeSort(arr, sortArr, arrInt, datatype, sortCount, 0, count-1);
 
         for(int i = 0; i < count; i++){
             outFS << right << setw(10) << arrInt[i] << endl;
@@ -232,7 +214,7 @@ int main(int argc, char *argv[]){
             count++;
         }
 
-        mergeSortStr(arr, sortArr, sortCount, 0, count-1);
+        mergeSort(arr, sortArr, arrInt, datatype, sortCount, 0, count-1);
 
         for(int i = 0; i < count; i++){
             outFS << arr[i] << endl;
