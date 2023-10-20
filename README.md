@@ -8,3 +8,7 @@ Reads from an input file with a network source, destination, and bandwith and pr
 Project 2 - Index Sorting:
 
 Reads from an input file of strings or integers and sorts them according to the indices in a separate sort file using MergeSort. Strings are sorted according to their indices as usual; however integers are read from right to left and sorted as such.
+
+Project 3 -  Viewership:
+
+Console application that stores user-input Media in a linked list entitled MediaList. Each media has a name and a linked list of regions, while each region has an associated name and viewer count. Program also follows the Rule of Three, containing a destructor, deep copy constructor, and deep copy assignment operator.
