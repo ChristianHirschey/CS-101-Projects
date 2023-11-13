@@ -12,3 +12,7 @@ Reads from an input file of strings or integers and sorts them according to the 
 Project 3 -  Viewership:
 
 Console application that stores user-input Media in a linked list entitled MediaList. Each media has a name and a linked list of regions, while each region has an associated name and viewer count. Program also follows the Rule of Three, containing a destructor, deep copy constructor, and deep copy assignment operator.
+
+Project 4 - Hash Tables and People:
+
+Console application that reads names, ids, e-mails, and similar related data from a text file and stores into a Hash Table implemented as a vector of lists with double hashing as collision resolution. The insert and find operations are highly optimized, being run in O(1) time.
